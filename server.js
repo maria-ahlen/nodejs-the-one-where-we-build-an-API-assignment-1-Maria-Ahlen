@@ -2,21 +2,23 @@
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
+//Express
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+
+
 //All the products
 const adapter1 = new FileSync('products.json');
 const products = low(adapter1);
 const product = products.get('products').value();
-
 
 //All the products in cart
 const adapter2 = new FileSync('cart.json');
 const cart = low(adapter2);
 let carts = cart.get('cart').value();
 
-//Express
-const express = require('express');
-const app = express();
-app.use(express.json());
 
 
 //Set defaults to products.json
@@ -24,6 +26,7 @@ products.defaults({ products: [] }).write();
 
 //Set defaults to cart.json
 cart.defaults({ cart: [] }).write();
+
 
 
 //Show all products
@@ -38,6 +41,7 @@ app.get('/cart', async (req, res) => {
     let data = await cart.get('cart');
     res.send(data);
 });
+
 
 
 //Add product to cart
@@ -64,6 +68,7 @@ app.post('/cart/addproduct/:id', (req, res) => {
 });
 
 
+
 //Remove product from cart
 function removeProduct(item) {
     cart.get('cart').remove(item).write();
@@ -77,11 +82,13 @@ app.delete('/cart/deleteproduct/:id', (req, res) => {
         res.send('This product does not exist!');
     } else {
         if (ID === cartItem[0].id) {
-        removeProduct(cartItem[0]);
-        res.send('Product removed from cart!');
+            removeProduct(cartItem[0]);
+            res.send('Product removed from cart!');
         }
     }
 });
+
+
 
 //Server listener on port
 app.listen(8000, () => {

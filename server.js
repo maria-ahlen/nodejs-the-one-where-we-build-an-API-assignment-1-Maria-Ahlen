@@ -21,10 +21,10 @@ let carts = cart.get('cart').value();
 
 
 
-//Set defaults to products.json
+//Set default to products.json
 products.defaults({ products: [] }).write();
 
-//Set defaults to cart.json
+//Set default to cart.json
 cart.defaults({ cart: [] }).write();
 
 
@@ -54,14 +54,14 @@ app.post('/cart/addproduct/:id', (req, res) => {
     let carts = cart.get('cart').value();
     const products = product.filter(products => products.id === parseInt(req.params.id));
     
-    if(products.length === 0) {
+    if (products.length === 0) {
         res.send('This product does not exist!');
     } else {
         let cartItem = carts.filter(item => item.id === parseInt(req.params.id));
-        if(cartItem.length === 0) {
+        if (cartItem.length === 0) {
             addProduct(products[0]);
             res.send('Product added to cart!');
-        } else if(ID === cartItem[0].id) {
+        } else if (ID === cartItem[0].id) {
             res.send('This product already exist in cart and will not be added!');
         }
     }
